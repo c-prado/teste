@@ -1,0 +1,48 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    env:
+      CLIENT_ID: ${{ secrets.CONSUMER_KEY_MAIN }}
+      USERNAME: ${{ secrets.USERNAME_MAIN }}
+      INSTANCE_URL: ${{ secrets.INSTANCE_URL_MAIN }}
+      JWT_SERVER_KEY: ${{ secrets.JWT_SERVER_KEY_MAIN }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Authorize Org
+        run: |
+          curl https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.gz | tar -xz
+          ./sfdx/bin/sfdx --version
+          ./sfdx/bin/sfdx auth:jwt:grant --instanceurl $INSTANCE_URL --clientid $CLIENT_ID --username $USERNAME --jwtkeyfile $JWT_SERVER_KEY --json
+
+      - name: Check Deploy & Run Tests
+        run: |
+          ./sfdx/bin/sfdx force:source:deploy -x $GITHUB_WORKSPACE/manifest/package.xml -u $USERNAME -w 30 --checkonly --testlevel RunLocalTests --json
+
+      - name: Deploy
+        run: |
+          ./sfdx/bin/sfdx force:source:deploy -x $GITHUB_WORKSPACE/manifest/package.xml -u $USERNAME -w 30 --testlevel RunLocalTests --json
+
+      - name: Logout
+        run: |
+          ./sfdx/bin/sfdx force:auth:logout -a -p
