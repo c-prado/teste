@@ -33,6 +33,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Testar criptografia openssl
+        run: |
            openssl enc -nosalt -aes-256-cbc -e -in $GITHUB_WORKSPACE/devops/nome.txt -out $GITHUB_WORKSPACE/devops/nome.txt.enc -base64 -K dfbe83a25e788791a90a89f57510e3ad -iv cde3d16d63a08eee2037b7b79f0fd2d3
            cat nome.txt.enc
 
