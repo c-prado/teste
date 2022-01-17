@@ -2,10 +2,12 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
 		<members>teste2__c</members>
+		<members>teste3__c</members>
 		<name>CustomObject</name>
 	</types>
 	<types>
 		<members>teste2__c</members>
+		<members>teste3__c</members>
 		<name>CustomTab</name>
 	</types>
 	<types>

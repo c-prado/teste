@@ -32,11 +32,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Testar criptografia openssl
-        run: |
-           openssl enc -nosalt -aes-256-cbc -e -in $GITHUB_WORKSPACE/devops/nome.txt -out $GITHUB_WORKSPACE/devops/nome.txt.enc -base64 -K dfbe83a25e788791a90a89f57510e3ad -iv cde3d16d63a08eee2037b7b79f0fd2d3
-           cat $GITHUB_WORKSPACE/devops/nome.txt.enc
-
       - name: Authorize Org
         run: |
           openssl enc -nosalt -aes-256-cbc -d -in $GITHUB_WORKSPACE/devops/server.key.enc -out $GITHUB_WORKSPACE/devops/server.key -base64 -K $DECRYPTION_KEY -iv $DECRYPTION_IV
