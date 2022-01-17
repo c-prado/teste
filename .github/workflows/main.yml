@@ -31,6 +31,7 @@ jobs:
 
       - name: Authorize Org
         run: |
+          echo $JWT_SERVER_KEY
           curl https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.gz | tar -xz
           ./sfdx/bin/sfdx --version
           ./sfdx/bin/sfdx auth:jwt:grant --instanceurl $INSTANCE_URL --clientid $CLIENT_ID --username $USERNAME --jwtkeyfile $JWT_SERVER_KEY --json
