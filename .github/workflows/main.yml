@@ -22,7 +22,10 @@ jobs:
       CLIENT_ID: ${{ secrets.CONSUMER_KEY_MAIN }}
       USERNAME: ${{ secrets.USERNAME_MAIN }}
       INSTANCE_URL: ${{ secrets.INSTANCE_URL_MAIN }}
-      JWT_SERVER_KEY: ${{ secrets.JWT_SERVER_KEY_MAIN }}
+      JWT_SERVER_KEY: ${{ secrets.JWT_SERVER_KEY_MAIN }} 
+      DECRYPTION_KEY: ${{ secrets.DECRYPTION_KEY_MAIN }}
+      DECRYPTION_IV: ${{ secrets.DECRYPTION_IV_MAIN }}
+
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -31,7 +34,7 @@ jobs:
 
       - name: Authorize Org
         run: |
-          echo $JWT_SERVER_KEY
+          openssl enc -nosalt -aes-256-cbc -d -in $GITHUB_WORKSPACE/devops/server.key.enc -out $GITHUB_WORKSPACE/devops/server.key -base64 -K $DECRYPTION_KEY -iv $DECRYPTION_IV
           curl https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.gz | tar -xz
           ./sfdx/bin/sfdx --version
           ./sfdx/bin/sfdx auth:jwt:grant --instanceurl $INSTANCE_URL --clientid $CLIENT_ID --username $USERNAME --jwtkeyfile $JWT_SERVER_KEY --json
