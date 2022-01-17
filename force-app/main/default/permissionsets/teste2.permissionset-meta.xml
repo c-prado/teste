@@ -9,6 +9,11 @@
         <field>teste2__c.teste2__c</field>
         <readable>false</readable>
     </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>teste3__c.teste3__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
     <hasActivationRequired>false</hasActivationRequired>
     <label>teste2</label>
 </PermissionSet>
